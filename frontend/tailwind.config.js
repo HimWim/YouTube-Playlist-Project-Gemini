@@ -9,5 +9,8 @@ export default {
         accent: colors.purple[500],
       },
     },
+    plugins: [
+      require("tailwind-scrollbar"),
+    ],
   },
 };

@@ -37,7 +37,7 @@ const Header: React.FC = () => {
   }, [dropdownOpen]);
 
   return (
-    <div className="relative top-0 w-full bg-black text-red-400 shadow-lg shadow-red-500/20">
+    <div className="z-100 fixed top-0 w-full bg-black text-red-400 shadow-lg shadow-red-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Left Section */}
         <div className="text-2xl font-bold uppercase">
