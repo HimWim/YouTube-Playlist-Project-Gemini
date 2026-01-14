@@ -7,46 +7,17 @@ import ProfilePlaylists from "../components/profile/ProfilePlaylists";
 import type { PlaylistCard } from "../components/profile/ProfilePlaylists";
 import ProfileSettings from "../components/profile/ProfileSettings";
 import Bubble from "../ui/Bubble";
+import {
+  mockUserProfileData,
+  mockProfilePlaylists,
+  type UserProfileData,
+} from "../data/mockProfileData";
 
 const Myprofile: React.FC = () => {
-  // Mock data - replace with actual data from your state management
-  const [userData, setUserData] = useState({
-    fullName: "Piyush Kumar",
-    email: "piyush@example.com",
-    avatar: "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg",
-    plan: "Pro" as "Free" | "Pro" | "Premium",
-    playlistsCreated: 12,
-    videosSaved: 45,
-    aiPlaylistsGenerated: 8,
-    lastActiveDate: "2 days ago",
-  });
-
-  const [playlists, setPlaylists] = useState<PlaylistCard[]>([
-    {
-      id: 1,
-      name: "React Tutorial Series",
-      thumbnail:
-        "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg",
-      videoCount: 15,
-      createdDate: "2024-01-15",
-    },
-    {
-      id: 2,
-      name: "JavaScript Fundamentals",
-      thumbnail:
-        "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg",
-      videoCount: 22,
-      createdDate: "2024-01-10",
-    },
-    {
-      id: 3,
-      name: "TypeScript Advanced",
-      thumbnail:
-        "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg",
-      videoCount: 8,
-      createdDate: "2024-01-05",
-    },
-  ]);
+  const [userData, setUserData] = useState<UserProfileData>(mockUserProfileData);
+  const [playlists, setPlaylists] = useState<PlaylistCard[]>(
+    mockProfilePlaylists
+  );
 
   const [activeTab, setActiveTab] = useState<"overview" | "settings">(
     "overview"
