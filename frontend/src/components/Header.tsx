@@ -25,6 +25,9 @@ const Header: React.FC = () => {
   const navigateToLogin = () => {
     navigate("/login");
   };
+  const navigateToMyprofile = () => {
+    navigate("/myprofile");
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -83,9 +86,11 @@ const Header: React.FC = () => {
             {dropdownOpen && (
               <div className="absolute right-0 top-12 bg-gray-900 border border-red-400 rounded-2xl shadow-lg shadow-red-500/30 z-50 min-w-[140px]">
                 <ul className="py-1">
-                  <li className="px-4 py-2 text-white font-semibold hover:bg-red-300 hover:text-black hover:rounded-2xl cursor-pointer">
+                  <li className="px-4 py-2 text-white font-semibold hover:bg-red-300 hover:text-black hover:rounded-2xl cursor-pointer"
+                  onClick={navigateToMyprofile}
+                  >
                     <CircleUserRound className="inline-block mr-2 mb-1" />
-                    Profile
+                    Profile 
                   </li>
                   <li
                     className="px-4 py-2 text-white font-semibold hover:bg-red-300 hover:text-black hover:rounded-2xl cursor-pointer"
