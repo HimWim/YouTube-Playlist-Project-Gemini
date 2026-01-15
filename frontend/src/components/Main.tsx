@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { mockPlaylistData } from "../data/mockDataGenerated";
-import { PlayCircle, NotebookPen, Save, Plus, Clock } from "lucide-react";
+import {
+  PlayCircle,
+  NotebookPen,
+  Save,
+  Plus,
+  Clock,
+  CheckCheck,
+  CircleCheck,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Main: React.FC = () => {
   const navigate = useNavigate();
 
   const [completedVideos, setCompletedVideos] = useState<number[]>([]);
-  const [completedPrereqs, setCompletedPrereqs] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [completedPrereqs, setCompletedPrereqs] = useState<
+    Record<string, boolean>
+  >({});
 
   const toggleVideoSeen = (id: number) => {
     setCompletedVideos((prev) =>
@@ -29,8 +37,7 @@ const Main: React.FC = () => {
   // 🎯 Relevancy Logic
   const getRelevancy = (video: any) => {
     const score =
-      (video.prerequisites?.length || 0) +
-      (video.topics?.length || 0);
+      (video.prerequisites?.length || 0) + (video.topics?.length || 0);
 
     if (score >= 8) return { label: "High", color: "bg-red-500" };
     if (score >= 5) return { label: "Medium", color: "bg-yellow-400" };
@@ -49,7 +56,7 @@ const Main: React.FC = () => {
               Video Learning Hub
             </h1>
             <p className="text-gray-400">
-              Follow the order, complete topics, and master skills 🚀
+              Follow the order, complete topics, and master skills
             </p>
           </div>
 
@@ -88,11 +95,11 @@ const Main: React.FC = () => {
                 </div>
 
                 {/* 🔥 RELEVANCY */}
-                <div
+                {/* <div
                   className={`absolute top-4 right-4 px-3 py-1 text-xs font-semibold rounded-full text-black ${relevancy.color}`}
                 >
                   {relevancy.label} Relevancy
-                </div>
+                </div> */}
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Thumbnail */}
@@ -114,20 +121,20 @@ const Main: React.FC = () => {
                           </span>
                         </div>
 
-                        <label className="flex items-center gap-2 text-sm cursor-pointer">
+                        <label className={`flex items-center gap-2 text-sm cursor-pointer font-semibold ${
+                              isCompleted ? "text-green-400" : "text-gray-400"
+                            }`}>
                           <input
                             type="checkbox"
                             checked={isCompleted}
                             onChange={() => toggleVideoSeen(video.id)}
-                            className="accent-green-400 w-4 h-4"
+                            className={`accent-green-400 w-4 h-4 hover:cursor-pointer`}
                           />
                           Seen
                         </label>
                       </div>
 
-                      <h2 className="text-2xl font-bold mb-4">
-                        {video.title}
-                      </h2>
+                      <h2 className="text-2xl font-bold mb-4">{video.title}</h2>
 
                       {/* 📌 PREREQUISITES (Scrollable) */}
                       <div className="mb-4 bg-black/50 border border-red-400/30 rounded-xl p-4 max-h-36 overflow-y-auto">
@@ -138,12 +145,15 @@ const Main: React.FC = () => {
                           {video.prerequisites?.map((req, i) => {
                             const key = `${video.id}-pre-${i}`;
                             return (
-                              <li key={key} className="flex items-center gap-3 text-gray-300">
+                              <li
+                                key={key}
+                                className="flex items-center gap-3 text-gray-300"
+                              >
                                 <input
                                   type="checkbox"
                                   checked={!!completedPrereqs[key]}
                                   onChange={() => togglePrereq(key)}
-                                  className="accent-green-400 w-4 h-4"
+                                  className="accent-green-400 w-4 h-4 hover:cursor-pointer"
                                 />
                                 <span
                                   className={
@@ -167,7 +177,10 @@ const Main: React.FC = () => {
                         </p>
                         <ul className="space-y-2 text-gray-300 text-sm">
                           {video.topics?.map((topic, i) => (
-                            <li key={i} className="flex justify-between items-center">
+                            <li
+                              key={i}
+                              className="flex justify-between items-center"
+                            >
                               <span>• {topic.title}</span>
                               <span className="flex items-center gap-1 text-gray-400">
                                 <Clock className="w-4 h-4" />
@@ -183,14 +196,14 @@ const Main: React.FC = () => {
                     <div className="mt-6 flex flex-wrap gap-4">
                       <button
                         onClick={() => navigate(video.url)}
-                        className="px-6 py-3 bg-red-400 text-black font-semibold rounded-xl hover:bg-red-300 transition-all"
+                        className="px-6 py-3 bg-red-400 text-black font-semibold rounded-xl hover:bg-red-300 hover:cursor-pointer transition-all"
                       >
                         Watch Video
                       </button>
 
                       <button
                         onClick={() => navigate(`/notes/${video.id}`)}
-                        className="flex items-center gap-2 px-6 py-3 bg-gray-800 border border-red-400/30 rounded-xl hover:bg-gray-700 transition-all"
+                        className="flex items-center gap-2 px-6 py-3 bg-gray-800 border border-red-400/30 rounded-xl hover:bg-gray-700 hover:cursor-pointer transition-all"
                       >
                         <NotebookPen className="w-5 h-5 text-red-300" />
                         Create Notes
