@@ -6,6 +6,8 @@ import LogIn from "./pages/LogIn";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import Myprofile from "./pages/Myprofile";
+import Main from "./components/Main";
+
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +16,8 @@ function App() {
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/myprofile" element={<Myprofile />} />
+        <Route path="/main" element={<Main/>} />
+
         {/* Layout route with Header */}
         <Route
           path="/"
