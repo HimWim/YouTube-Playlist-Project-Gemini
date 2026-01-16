@@ -29,6 +29,10 @@ const Header: React.FC = () => {
     navigate("/myprofile");
   };
 
+  const navigateToTrackProgress = () => {
+    navigate("/track-progress");
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -67,7 +71,10 @@ const Header: React.FC = () => {
         ) : (
           <div className="relative flex items-center gap-10" ref={dropdownRef}>
             <Tooltip text="Track Your Progress" position="bottom">
-              <ChartLineIcon className="w-8 h-8 hover:cursor-pointer hover:text-red-300 hover:scale-110 transition-all duration-300" />
+              <ChartLineIcon 
+                className="w-8 h-8 hover:cursor-pointer hover:text-red-300 hover:scale-110 transition-all duration-300" 
+                onClick={navigateToTrackProgress}
+              />
             </Tooltip>
             <Tooltip text="Settings" position="bottom">
               <Settings className="w-8 h-8 hover:cursor-pointer hover:text-red-300 hover:scale-110 transition-all duration-300" />

@@ -3,21 +3,15 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ProfileHeader from "../components/profile/ProfileHeader";
 import ProfileStats from "../components/profile/ProfileStats";
-import ProfilePlaylists from "../components/profile/ProfilePlaylists";
-import type { PlaylistCard } from "../components/profile/ProfilePlaylists";
 import ProfileSettings from "../components/profile/ProfileSettings";
 import Bubble from "../ui/Bubble";
 import {
   mockUserProfileData,
-  mockProfilePlaylists,
   type UserProfileData,
 } from "../data/mockProfileData";
 
 const Myprofile: React.FC = () => {
   const [userData, setUserData] = useState<UserProfileData>(mockUserProfileData);
-  const [playlists, setPlaylists] = useState<PlaylistCard[]>(
-    mockProfilePlaylists
-  );
 
   const [activeTab, setActiveTab] = useState<"overview" | "settings">(
     "overview"
@@ -25,21 +19,6 @@ const Myprofile: React.FC = () => {
 
   const handleEditProfile = () => {
     setActiveTab("settings");
-  };
-
-  const handlePlaylistOpen = (id: number) => {
-    console.log("Opening playlist:", id);
-    // Navigate to playlist or open modal
-  };
-
-  const handlePlaylistDelete = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this playlist?")) {
-      setPlaylists(playlists.filter((p) => p.id !== id));
-      setUserData((prev) => ({
-        ...prev,
-        playlistsCreated: prev.playlistsCreated - 1,
-      }));
-    }
   };
 
   const handleNameChange = (name: string) => {
@@ -120,13 +99,6 @@ const Myprofile: React.FC = () => {
               videosSaved={userData.videosSaved}
               aiPlaylistsGenerated={userData.aiPlaylistsGenerated}
               lastActiveDate={userData.lastActiveDate}
-            />
-
-            {/* Profile Playlists */}
-            <ProfilePlaylists
-              playlists={playlists}
-              onOpen={handlePlaylistOpen}
-              onDelete={handlePlaylistDelete}
             />
           </div>
         ) : (
