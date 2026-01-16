@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { CheckCircle2, Circle, Calendar, Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { CheckCircle2, Circle, Calendar, Clock, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import type { PlaylistWithVideos, PlaylistVideo } from "../../data/mockProfileData";
 import PieChart from "../../ui/PieChart";
 
 interface PlaylistWithVideosProps {
   playlist: PlaylistWithVideos;
   onVideoToggle?: (playlistId: number, videoId: number, watched: boolean) => void;
+  onDelete?: (playlistId: number) => void;
 }
 
 const PlaylistWithVideosComponent: React.FC<PlaylistWithVideosProps> = ({
   playlist,
   onVideoToggle,
+  onDelete,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hoveredPlaylistId, setHoveredPlaylistId] = useState<number | null>(null);
@@ -90,13 +92,27 @@ const PlaylistWithVideosComponent: React.FC<PlaylistWithVideosProps> = ({
             </div>
           </div>
 
-          {/* Expand/Collapse Icon */}
-          <div className="text-red-400 transition-transform duration-300">
-            {isExpanded ? (
-              <ChevronUp className="w-6 h-6" />
-            ) : (
-              <ChevronDown className="w-6 h-6" />
-            )}
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            {/* Delete Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete?.(playlist.id);
+              }}
+              className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition hover:scale-110"
+              title="Delete Playlist"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
+            {/* Expand/Collapse Icon */}
+            <div className="text-red-400 transition-transform duration-300">
+              {isExpanded ? (
+                <ChevronUp className="w-6 h-6" />
+              ) : (
+                <ChevronDown className="w-6 h-6" />
+              )}
+            </div>
           </div>
         </div>
       </div>

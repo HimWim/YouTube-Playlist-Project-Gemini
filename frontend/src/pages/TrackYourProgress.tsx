@@ -3,12 +3,14 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PlaylistWithVideosComponent from "../components/track/PlaylistWithVideos";
 import Bubble from "../ui/Bubble";
-import { mockPlaylistsWithVideos, type PlaylistWithVideos } from "../data/mockProfileData";
+import { Plus, ArrowRight } from "lucide-react";
+import { mockPlaylistsWithVideos, type PlaylistWithVideos, type PlaylistVideo } from "../data/mockProfileData";
 
 const TrackYourProgress: React.FC = () => {
   const [playlists, setPlaylists] = useState<PlaylistWithVideos[]>(
     mockPlaylistsWithVideos
   );
+  const [inputLink, setInputLink] = useState("");
 
   const handleVideoToggle = (
     playlistId: number,
@@ -27,6 +29,43 @@ const TrackYourProgress: React.FC = () => {
           : playlist
       )
     );
+  };
+
+  const handleAddPlaylist = () => {
+    if (!inputLink.trim()) return;
+
+    const isPlaylist = inputLink.includes("playlist");
+    if (!isPlaylist) {
+      alert("Please enter a valid YouTube playlist link");
+      return;
+    }
+
+    // Generate mock videos for the new playlist
+    const mockVideos: PlaylistVideo[] = Array.from({ length: 5 }, (_, i) => ({
+      id: Date.now() + i,
+      title: `Video ${i + 1} - New Playlist`,
+      thumbnail: "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg",
+      duration: `${Math.floor(Math.random() * 30) + 10}:${Math.floor(Math.random() * 60).toString().padStart(2, "0")}`,
+      watched: false,
+    }));
+
+    const newPlaylist: PlaylistWithVideos = {
+      id: Date.now(),
+      name: `New YouTube Playlist - ${new Date().toLocaleDateString()}`,
+      thumbnail: "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg",
+      videoCount: mockVideos.length,
+      createdDate: new Date().toISOString().split("T")[0],
+      videos: mockVideos,
+    };
+
+    setPlaylists((prev) => [newPlaylist, ...prev]);
+    setInputLink("");
+  };
+
+  const handleDeletePlaylist = (playlistId: number) => {
+    if (window.confirm("Are you sure you want to delete this playlist?")) {
+      setPlaylists((prev) => prev.filter((p) => p.id !== playlistId));
+    }
   };
 
   const totalVideos = playlists.reduce(
@@ -57,6 +96,37 @@ const TrackYourProgress: React.FC = () => {
           <p className="text-gray-400 text-lg">
             Monitor your learning journey and mark videos as watched
           </p>
+        </div>
+
+        {/* Add Playlist Input */}
+        <div className="bg-gray-800 border border-red-400/40 rounded-xl p-6 mb-8">
+          <h3 className="text-xl font-bold text-white mb-4">Add New Playlist</h3>
+          <div className="flex gap-4">
+            <input
+              type="text"
+              placeholder="Paste YouTube playlist link..."
+              value={inputLink}
+              onChange={(e) => setInputLink(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  handleAddPlaylist();
+                }
+              }}
+              className="flex-1 h-12 px-4 rounded-lg bg-gray-900 border border-red-400/40 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
+            />
+            <button
+              onClick={handleAddPlaylist}
+              className="px-6 h-12 bg-red-400 text-black font-semibold flex justify-center items-center rounded-lg hover:bg-red-300 transition hover:scale-105 cursor-pointer"
+            >
+              <Plus className="h-6 w-6" />
+            </button>
+            <button
+              onClick={handleAddPlaylist}
+              className="h-12 px-4 flex items-center gap-1 bg-red-400 text-black font-semibold text-lg rounded-lg hover:bg-red-300 hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
+            >
+              ADD <ArrowRight className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {/* Overall Stats */}
@@ -96,6 +166,7 @@ const TrackYourProgress: React.FC = () => {
                 key={playlist.id}
                 playlist={playlist}
                 onVideoToggle={handleVideoToggle}
+                onDelete={handleDeletePlaylist}
               />
             ))
           )}

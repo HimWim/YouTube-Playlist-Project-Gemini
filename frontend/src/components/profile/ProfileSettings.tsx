@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { User, Mail, Image, Moon, Sun, Trash2, Save } from "lucide-react";
+import { User, Mail, Image, Moon, Sun, Trash2, Save, Lock } from "lucide-react";
 
 interface ProfileSettingsProps {
   currentName: string;
@@ -10,6 +10,7 @@ interface ProfileSettingsProps {
   onEmailChange?: (email: string) => void;
   onAvatarChange?: (avatar: string) => void;
   onDarkModeToggle?: (enabled: boolean) => void;
+  onPasswordChange?: (oldPassword: string, newPassword: string) => void;
   onDeleteAccount?: () => void;
 }
 
@@ -22,18 +23,45 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   onEmailChange,
   onAvatarChange,
   onDarkModeToggle,
+  onPasswordChange,
   onDeleteAccount,
 }) => {
   const [name, setName] = useState(currentName);
   const [email, setEmail] = useState(currentEmail);
   const [avatar, setAvatar] = useState(currentAvatar);
   const [darkMode, setDarkMode] = useState(isDarkMode);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSave = () => {
     onNameChange?.(name);
     onEmailChange?.(email);
     onAvatarChange?.(avatar);
     onDarkModeToggle?.(darkMode);
+  };
+
+  const handlePasswordChange = () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      alert("Please fill in all password fields");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("New passwords do not match");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      alert("New password must be at least 8 characters long");
+      return;
+    }
+
+    onPasswordChange?.(oldPassword, newPassword);
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    alert("Password changed successfully!");
   };
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +133,44 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
               className="hidden"
             />
           </label>
+        </div>
+      </div>
+
+      {/* Change Password */}
+      <div className="bg-gray-800 border border-red-400/40 rounded-xl p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Lock className="w-5 h-5 text-red-400" />
+          <h3 className="text-lg font-semibold text-white">Change Password</h3>
+        </div>
+        <div className="space-y-4">
+          <input
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            className="w-full h-12 px-4 rounded-lg bg-gray-900 border border-red-400/40 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
+            placeholder="Enter current password"
+          />
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="w-full h-12 px-4 rounded-lg bg-gray-900 border border-red-400/40 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
+            placeholder="Enter new password (min. 8 characters)"
+          />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full h-12 px-4 rounded-lg bg-gray-900 border border-red-400/40 text-white focus:outline-none focus:ring-2 focus:ring-red-400"
+            placeholder="Confirm new password"
+          />
+          <button
+            onClick={handlePasswordChange}
+            className="w-full px-6 py-3 bg-red-400 text-black font-semibold rounded-lg hover:bg-red-300 transition hover:scale-105 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <Lock className="w-5 h-5" />
+            Change Password
+          </button>
         </div>
       </div>
 

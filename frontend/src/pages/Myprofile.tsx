@@ -38,6 +38,12 @@ const Myprofile: React.FC = () => {
     // Implement dark mode logic
   };
 
+  const handlePasswordChange = (oldPassword: string, newPassword: string) => {
+    console.log("Password change requested");
+    // Implement password change logic
+    // This would typically make an API call to update the password
+  };
+
   const handleDeleteAccount = () => {
     if (
       window.confirm(
@@ -112,6 +118,7 @@ const Myprofile: React.FC = () => {
               onEmailChange={handleEmailChange}
               onAvatarChange={handleAvatarChange}
               onDarkModeToggle={handleDarkModeToggle}
+              onPasswordChange={handlePasswordChange}
               onDeleteAccount={handleDeleteAccount}
             />
           </div>
