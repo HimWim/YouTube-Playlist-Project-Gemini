@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Header from "./components/Header";
 import Myprofile from "./pages/Myprofile";
 import TrackYourProgress from "./pages/TrackYourProgress";
+import Main from "./components/Main";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/myprofile" element={<Myprofile />} />
         <Route path="/track-progress" element={<TrackYourProgress />} />
+        <Route path="/main" element={<Main/>} />
+
         {/* Layout route with Header */}
         <Route
           path="/"

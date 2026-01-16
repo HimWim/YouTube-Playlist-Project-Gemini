@@ -1,6 +1,7 @@
 import {
   ChartLineIcon,
   CircleUserRound,
+  House,
   LogIn,
   LogOut,
   Settings,
@@ -33,6 +34,9 @@ const Header: React.FC = () => {
     navigate("/track-progress");
   };
 
+  const navigateToHome = () => {
+    navigate("/");
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -53,10 +57,13 @@ const Header: React.FC = () => {
   }, [dropdownOpen]);
 
   return (
-    <div className="fixed w-full bg-black text-red-400 shadow-lg shadow-red-500/20">
+    <div className="z-100 fixed w-full bg-black text-red-400 shadow-lg shadow-red-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Left Section */}
-        <div className="text-2xl font-bold uppercase">
+        <div
+          className="text-2xl font-bold uppercase hover:cursor-pointer"
+          onClick={() => navigateToHome()}
+        >
           YouTube Playlist Project
         </div>
 
@@ -70,6 +77,12 @@ const Header: React.FC = () => {
           </div>
         ) : (
           <div className="relative flex items-center gap-10" ref={dropdownRef}>
+            <Tooltip text="Home" position="bottom">
+              <House
+                className="w-8 h-8 hover:cursor-pointer hover:text-red-300 hover:scale-110 transition-all duration-300"
+                onClick={() => navigateToHome()}
+              />
+            </Tooltip>
             <Tooltip text="Track Your Progress" position="bottom">
               <ChartLineIcon 
                 className="w-8 h-8 hover:cursor-pointer hover:text-red-300 hover:scale-110 transition-all duration-300" 
@@ -93,11 +106,12 @@ const Header: React.FC = () => {
             {dropdownOpen && (
               <div className="absolute right-0 top-12 bg-gray-900 border border-red-400 rounded-2xl shadow-lg shadow-red-500/30 z-50 min-w-[140px]">
                 <ul className="py-1">
-                  <li className="px-4 py-2 text-white font-semibold hover:bg-red-300 hover:text-black hover:rounded-2xl cursor-pointer"
-                  onClick={navigateToMyprofile}
+                  <li
+                    className="px-4 py-2 text-white font-semibold hover:bg-red-300 hover:text-black hover:rounded-2xl cursor-pointer"
+                    onClick={navigateToMyprofile}
                   >
                     <CircleUserRound className="inline-block mr-2 mb-1" />
-                    Profile 
+                    Profile
                   </li>
                   <li
                     className="px-4 py-2 text-white font-semibold hover:bg-red-300 hover:text-black hover:rounded-2xl cursor-pointer"
