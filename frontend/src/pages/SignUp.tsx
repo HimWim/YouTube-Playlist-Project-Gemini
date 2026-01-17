@@ -1,17 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiService } from "../services/api";
 
-interface SignUpProps {
-  onSubmit?: (data: {
-    fullName: string;
-    email: string;
-    password: string;
-    agree: boolean;
-  }) => Promise<void> | void;
-  onSwitchToLogIn?: () => void;
-}
-
-const SignUp: React.FC<SignUpProps> = ({ onSubmit, onSwitchToLogIn }) => {
+const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
@@ -97,7 +88,14 @@ const SignUp: React.FC<SignUpProps> = ({ onSubmit, onSwitchToLogIn }) => {
 
     try {
       setLoading(true);
-      await onSubmit?.({ fullName, email, password, agree });
+      const result = await apiService.signup({ fullName, email, password });
+      
+      if (result.error) {
+        setErrors({ general: result.error });
+      } else {
+        // Signup successful, redirect to profile
+        navigate("/myprofile");
+      }
     } catch (err) {
       setErrors({ general: "Sign up failed. Please try again later." });
     } finally {

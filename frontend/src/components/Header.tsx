@@ -10,6 +10,7 @@ import {
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Tooltip from "../ui/Tooltip";
+import { apiService } from "../services/api";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -32,6 +33,13 @@ const Header: React.FC = () => {
 
   const navigateToTrackProgress = () => {
     navigate("/track-progress");
+  };
+
+  const handleLogout = async () => {
+    console.log("clicked")
+    await apiService.logout();
+    setIsLoggedIn(false);
+    navigate("/login");
   };
 
   const navigateToHome = () => {
@@ -118,6 +126,7 @@ const Header: React.FC = () => {
                     onClick={() => {
                       setIsLoggedIn(false);
                       setDropdownOpen(false);
+                      handleLogout()
                     }}
                   >
                     <LogOut className="inline-block mr-2 mb-1" />

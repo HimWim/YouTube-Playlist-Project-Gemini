@@ -1,36 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ProfileHeader from "../components/profile/ProfileHeader";
 import ProfileStats from "../components/profile/ProfileStats";
 import ProfileSettings from "../components/profile/ProfileSettings";
 import Bubble from "../ui/Bubble";
-import {
-  mockUserProfileData,
-  type UserProfileData,
-} from "../data/mockProfileData";
+import { apiService } from "../services/api";
+import type { UserProfileData } from "../data/mockProfileData";
 
 const Myprofile: React.FC = () => {
-  const [userData, setUserData] = useState<UserProfileData>(mockUserProfileData);
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState<UserProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState<"overview" | "settings">(
     "overview"
   );
 
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      setLoading(true);
+      const result = await apiService.getProfile();
+      if (result.error) {
+        if (result.error.includes("Not authenticated") || result.error.includes("401")) {
+          navigate("/login");
+        } else {
+          console.error("Error fetching profile:", result.error);
+        }
+      } else if (result.data) {
+        // Map API response to UserProfileData format
+        const profileData: UserProfileData = {
+          fullName: result.data.full_name || "",
+          email: result.data.email || "",
+          avatar: result.data.avatar || "",
+          plan: result.data.plan || "Free",
+          playlistsCreated: result.data.playlists_created || 0,
+          videosSaved: result.data.videos_saved || 0,
+          aiPlaylistsGenerated: result.data.ai_playlists_generated || 0,
+          lastActiveDate: result.data.last_active_date || "Never",
+        };
+        setUserData(profileData);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleEditProfile = () => {
     setActiveTab("settings");
   };
 
-  const handleNameChange = (name: string) => {
-    setUserData((prev) => ({ ...prev, fullName: name }));
+  const handleNameChange = async (name: string) => {
+    if (!userData) return;
+    const result = await apiService.updateProfile({ fullName: name });
+    if (!result.error && result.data) {
+      setUserData((prev) => prev ? { ...prev, fullName: name } : null);
+    }
   };
 
-  const handleEmailChange = (email: string) => {
-    setUserData((prev) => ({ ...prev, email }));
+  const handleEmailChange = async (email: string) => {
+    if (!userData) return;
+    const result = await apiService.updateProfile({ email });
+    if (!result.error && result.data) {
+      setUserData((prev) => prev ? { ...prev, email } : null);
+    }
   };
 
-  const handleAvatarChange = (avatar: string) => {
-    setUserData((prev) => ({ ...prev, avatar }));
+  const handleAvatarChange = async (avatar: string) => {
+    if (!userData) return;
+    const result = await apiService.updateProfile({ avatar });
+    if (!result.error && result.data) {
+      setUserData((prev) => prev ? { ...prev, avatar } : null);
+    }
   };
 
   const handleDarkModeToggle = (enabled: boolean) => {
@@ -38,22 +86,42 @@ const Myprofile: React.FC = () => {
     // Implement dark mode logic
   };
 
-  const handlePasswordChange = (oldPassword: string, newPassword: string) => {
-    console.log("Password change requested");
-    // Implement password change logic
-    // This would typically make an API call to update the password
+  const handlePasswordChange = async (oldPassword: string, newPassword: string) => {
+    const result = await apiService.changePassword({ oldPassword, newPassword });
+    if (result.error) {
+      alert(result.error);
+    } else {
+      alert("Password changed successfully");
+    }
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     if (
       window.confirm(
         "Are you sure you want to delete your account? This action cannot be undone."
       )
     ) {
-      console.log("Account deletion requested");
-      // Implement account deletion logic
+      const result = await apiService.deleteAccount();
+      if (!result.error) {
+        await apiService.logout();
+        navigate("/login");
+      } else {
+        alert(result.error);
+      }
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <div className="text-red-400">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!userData) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">

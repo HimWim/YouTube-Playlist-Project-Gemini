@@ -61,7 +61,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     setOldPassword("");
     setNewPassword("");
     setConfirmPassword("");
-    alert("Password changed successfully!");
   };
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

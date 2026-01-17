@@ -1,16 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiService } from "../services/api";
 
-interface LogInProps {
-  onSubmit?: (data: {
-    email: string;
-    password: string;
-    remember: boolean;
-  }) => Promise<void> | void;
-  onSwitchToSignUp?: () => void;
-}
-
-const LogIn: React.FC<LogInProps> = ({ onSubmit, onSwitchToSignUp }) => {
+const LogIn: React.FC = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -51,7 +43,14 @@ const LogIn: React.FC<LogInProps> = ({ onSubmit, onSwitchToSignUp }) => {
 
     try {
       setLoading(true);
-      await onSubmit?.({ email, password, remember });
+      const result = await apiService.login({ email, password, remember });
+      
+      if (result.error) {
+        setErrors({ general: result.error });
+      } else {
+        // Login successful, redirect to home or profile
+        navigate("/myprofile");
+      }
     } catch (err) {
       setErrors({
         general: "Log in failed. Please check your credentials and try again.",
