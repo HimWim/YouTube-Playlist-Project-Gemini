@@ -8,8 +8,6 @@ import {
   Save,
   Plus,
   Clock,
-  CheckCheck,
-  CircleCheck,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -94,12 +92,6 @@ const Main: React.FC = () => {
                   {index + 1}
                 </div>
 
-                {/* 🔥 RELEVANCY */}
-                {/* <div
-                  className={`absolute top-4 right-4 px-3 py-1 text-xs font-semibold rounded-full text-black ${relevancy.color}`}
-                >
-                  {relevancy.label} Relevancy
-                </div> */}
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Thumbnail */}
@@ -121,17 +113,6 @@ const Main: React.FC = () => {
                           </span>
                         </div>
 
-                        <label className={`flex items-center gap-2 text-sm cursor-pointer font-semibold ${
-                              isCompleted ? "text-green-400" : "text-gray-400"
-                            }`}>
-                          <input
-                            type="checkbox"
-                            checked={isCompleted}
-                            onChange={() => toggleVideoSeen(video.id)}
-                            className={`accent-green-400 w-4 h-4 hover:cursor-pointer`}
-                          />
-                          Seen
-                        </label>
                       </div>
 
                       <h2 className="text-2xl font-bold mb-4">{video.title}</h2>
@@ -149,12 +130,6 @@ const Main: React.FC = () => {
                                 key={key}
                                 className="flex items-center gap-3 text-gray-300"
                               >
-                                <input
-                                  type="checkbox"
-                                  checked={!!completedPrereqs[key]}
-                                  onChange={() => togglePrereq(key)}
-                                  className="accent-green-400 w-4 h-4 hover:cursor-pointer"
-                                />
                                 <span
                                   className={
                                     completedPrereqs[key]
